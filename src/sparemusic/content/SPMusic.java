@@ -7,7 +7,7 @@ import arc.Events;
 import arc.audio.Music;
 import arc.math.Mathf;
 import arc.struct.*;
-import arc.util.*;
+import arc.util.*; 
 import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.EventType;
@@ -133,6 +133,13 @@ public class SPMusic{
         return null;
     }
 
+    private static void addWeatherMusic(String weatherName, Seq<Music> music){
+        Weather w = content.weathers().find(e -> e.name.equals(weatherName));
+        if(w != null){
+            weatherMusicSets.put(w, music);
+        }
+    }
+
     /** Places music in musicSets, all of it */
     public static void initMusicSets(){
         musicSets.put("vanillaAmbient", new Seq<>(Vars.control.sound.ambientMusic));
@@ -153,7 +160,8 @@ public class SPMusic{
         musicSets.put("grimDark", Seq.with(grim2));
 
         // Weather specific music
-        weatherMusicSets.put(Weathers.rain, Seq.with(rain1));
+        addWeatherMusic(Weathers.rain.name, Seq.with(rain1));
+        addWeatherMusic("minedusty-heavy-rain", Seq.with(rain1));
         // weatherMusicSets.put(Weathers.sandstorm, Seq.with(sand1));
     }
 
