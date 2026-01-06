@@ -1,15 +1,18 @@
 package sparemusic.content;
 
 import static arc.Core.settings;
+import static mindustry.Vars.*;
 
 import arc.Events;
 import arc.audio.Music;
+import arc.math.Mathf;
 import arc.struct.*;
 import arc.util.*;
 import mindustry.Vars;
 import mindustry.content.*;
 import mindustry.game.EventType;
 import mindustry.game.EventType.WorldLoadEvent;
+import mindustry.game.Teams.TeamData;
 import mindustry.type.*;
 import mindustry.type.Weather.WeatherEntry;
 
@@ -89,6 +92,7 @@ public class SPMusic{
         if(!Vars.state.isGame() || Vars.state.boss() != null) return;
         String prefix = getPlanetPrefix();
 
+        // Plays weather specific music (priority over Grim music)
         Seq<Music> weather = currentWeatherMusic();
         if(weather != null){
             Vars.control.sound.ambientMusic.set(weather);
@@ -96,6 +100,7 @@ public class SPMusic{
             return;
         }
 
+        // Plays Grimdark music (priority over Dark music)
         if(isGrim()){
             setMusicSet(prefix + "Ambient", Vars.control.sound.ambientMusic);
             setMusicSet("grimDark", Vars.control.sound.darkMusic);
@@ -107,9 +112,14 @@ public class SPMusic{
 
     }
 
+    /** Weather to play grimdark music */
     static boolean isGrim(){
-        var data = Vars.player.team().data();
-        return data.hasCore() && data.core().healthf() < 0.5f;
+        var data = player.team().data();
+        if (data.hasCore() && data.core().healthf() < 0.5f){
+            return true;
+        }
+
+        return Mathf.chance((float)(Math.log10((state.wave - 30f)/10f) + 1) / 3f);
     } 
 
     @Nullable static Seq<Music> currentWeatherMusic(){
