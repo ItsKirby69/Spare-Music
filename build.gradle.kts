@@ -3,6 +3,7 @@ import arc.util.*
 import arc.util.serialization.*
 import ent.*
 import java.io.*
+import java.net.*
 
 buildscript{
     val arcVersion: String by project
@@ -123,11 +124,8 @@ project(":"){
 
         val meta = layout.projectDirectory.file("$temporaryDir/mod.json")
         from(
-            files(sourceSets["main"].output.classesDirs),
-            files(sourceSets["main"].output.resourcesDir),
-            configurations.runtimeClasspath.map{conf -> conf.map{if(it.isDirectory) it else zipTree(it)}},
-
-            files(layout.projectDirectory.dir("assets")),
+            sourceSets["main"].output,
+            layout.projectDirectory.dir("assets"),
             layout.projectDirectory.file("icon.png"),
             meta
         )
@@ -209,11 +207,56 @@ project(":"){
             folder.mkdirs()
 
             val input = desktopJar.get().asFile
+            val modName = input.nameWithoutExtension
+
             folder.child(input.name).delete()
+            folder.child("${modName}Desktop.zip").delete()
             folder.child(dexJar.get()).delete()
+            folder.child("${dexJar.get()}Desktop.zip").delete()
             Fi(input).copyTo(folder)
 
             logger.lifecycle("Copied :jar output to $folder.")
+        }
+    }
+
+    tasks.register("runGame"){
+        dependsOn("install")
+        group = "modding"
+        description = "Downloads (if missing) .jar file of Mindustry with version specified in gradle.properties"
+
+        doLast {
+            val applicationVersion: String by project
+            val mindustryDirectory: String by project
+
+            // Gets directory to check for game jar
+            val dir = File(System.getProperty("user.home"), mindustryDirectory)
+            if (!dir.exists()) dir.mkdirs()
+
+            val mindustryJar = File(dir, "Mindustry$applicationVersion.jar")
+            val url = "https://github.com/Anuken/Mindustry/releases/download/$applicationVersion/Mindustry.jar"
+            if(!mindustryJar.exists()) {
+                val conn = URL(url).openConnection() as HttpURLConnection
+                conn.requestMethod = "HEAD"
+                conn.connectTimeout = 5000
+                conn.readTimeout = 5000
+
+                if (conn.responseCode != 200) {
+                    throw IllegalStateException(
+                        "You're downloading a non-existing mindustry version: ($applicationVersion). Make sure that `applicationVersion` is a valid version!"
+                    )
+                }
+
+                logger.lifecycle("Downloading $applicationVersion from $url ...")
+                URL(url).openStream().use { input ->
+                    mindustryJar.outputStream().use { output -> input.copyTo(output) }
+                }
+                logger.lifecycle("Downloaded to ${mindustryJar.absolutePath}.\n")
+            }
+
+            logger.lifecycle("Launching ${mindustryJar.name}...\n")
+            ProcessBuilder(
+                listOf("java", "-jar", mindustryJar.absolutePath)
+            ).inheritIO().start()
         }
     }
 }

@@ -1,9 +1,9 @@
 {
-    "displayName": "Mod Template",
-    "description": "Mindustry Java mod template, complete with EntityAnno and syntax downgrader integration.",
-    "version": "v1.0",
-    "minGameVersion": "146",
-    "author": "You",
+    "displayName": "Spare Music",
+    "description": "[#fadf87[]]Adds more music to Mindustry![]\n[acid[]]Functions as the music mod for my other mod, MineDusty![]",
+    "version": "v1",
+    "minGameVersion": "154",
+    "author": "[brick[]]ItsKirby[]",
     "java": true,
-    "main": "template.ModTemplate"
+    "main": "sparemusic.SpareMusicMod"
 }

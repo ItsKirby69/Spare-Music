@@ -10,3 +10,7 @@ build/
 .idea/
 .vscode/
 .kateproject
+
+assets/junkyard/
+*.png~
+*.log
