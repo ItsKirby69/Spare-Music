@@ -18,6 +18,16 @@ public class SpareMusicMod extends Mod{
 	public SpareMusicMod() {
 		Log.info("[gold]♪ ♫ ♬ [][brick]SpareMusic[] [gold]is loaded!");
 
+        Events.on(EventType.MusicRegisterEvent.class, e ->
+            SPMusic.load()
+        );
+	}
+
+	@Override
+	public void init() {
+		SPSettings.load();
+	}
+
     @Override
     public void loadContent(){
 		Seq<String> subtitles = new Seq<>(bundle.get("subtitle.lines").split("/"));
