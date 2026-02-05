@@ -10,6 +10,8 @@
 # Spare Music
 This mod aims to add more music to the game. Bringing more music variety to places that feels repetitive as well as introduce more event-specific music for certain weathers and such.
 
+> The music is created by me, to be used only as part of this mod as distributed.
+
 **This mod uses a modified version of [Glenn's template](https://github.com/GglLfr/MindustryModTemplate)**
 
 

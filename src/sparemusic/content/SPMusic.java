@@ -44,7 +44,7 @@ public class SPMusic{
     grim1, grim2, // Grim dark music
 
     // Weather specific music
-    rain1;
+    rain1, rain2;
 
     public static void load(){
         initMusics();
@@ -54,11 +54,11 @@ public class SPMusic{
 
     static void initMusics(){
         // Single musics
-        rain1 = loadMusic("rain1");
-
         // String[] ambientTracks = {"ambient1", "ambient2"};
-        String[] grimTracks = {"grim2"};
+        String[] rainTracks = {"rain1", "rain2"};
+        String[] grimTracks = {"grim1", "grim2"};
 
+        // Les exemples
         String[] erekirTracks = {"erekir1", "erekir2"};
         String[] erekirDarkTracks = {"erekirDark1", "erekirDark2"};
         String[] erekirBossTracks = {"erekirBoss1", "erekirBoss2"};
@@ -68,6 +68,7 @@ public class SPMusic{
         String[] theiaBossTracks = {"theiaBoss1", "theiaBoss2"};
 
         loadMusicSet("grim/", grimTracks);
+        loadMusicSet("", rainTracks);
 
         // loadMusicSet("erekir/", erekirTracks);
         // loadMusicSet("erekir/", erekirDarkTracks);
@@ -112,7 +113,63 @@ public class SPMusic{
 
     }
 
-    /** Weather to play grimdark music */
+    /** Places music in musicSets, all of it */
+    public static void initMusicSets(){
+        musicSets.put("vanillaAmbient", new Seq<>(Vars.control.sound.ambientMusic));
+        musicSets.put("vanillaDark", new Seq<>(Vars.control.sound.darkMusic));
+        musicSets.put("vanillaBoss", new Seq<>(Vars.control.sound.bossMusic));
+
+        // WIP: Erekir sets
+        // musicSets.put("erekirAmbient", Seq.with(erekir1, erekir2));
+        // musicSets.put("erekirDark", Seq.with(erekirDark1, erekirDark2));
+        // musicSets.put("erekirBoss", Seq.with(erekirBoss1, erekirBoss2));
+
+        // Theia specific music
+        // musicSets.put("theiaAmbient", Seq.with(theia1, theia2));
+        // musicSets.put("theiaDark", Seq.with(theiaDark1, theiaDark2));
+        // musicSets.put("theiaBoss", Seq.with(theiaBoss1, theiaBoss2));
+
+        // Then comes custom music
+        musicSets.put("grimDark", Seq.with(grim1, grim2));
+
+        // Weather specific music
+        addWeatherMusic(Weathers.rain.name, Seq.with(rain1, rain2));
+        addWeatherMusic("minedusty-heavy-rain", Seq.with(rain1, rain2));
+        // weatherMusicSets.put(Weathers.sandstorm, Seq.with(sand1));
+    }
+
+    /** Update Ambient, Dark, and Boss music sets based on planet */
+    private static void updatePlanetMusic(){
+        String prefix = getPlanetPrefix();
+        boolean minedustyTheia= prefix == "theia";
+
+        // if(minedustyTheia){
+        //     // Log.info("Loading theia specific music!");
+        //     // setMusicSet("theiaAmbient", Vars.control.sound.ambientMusic);
+        //     // setMusicSet("theiaDark", Vars.control.sound.darkMusic);
+        //     // setMusicSet("theiaBoss", Vars.control.sound.bossMusic);
+        //     return;
+        // }
+
+        if(Vars.state.rules.planet != Planets.sun){
+            setMusicSet(prefix + "Ambient", Vars.control.sound.ambientMusic);
+            setMusicSet(prefix + "Dark", Vars.control.sound.darkMusic);
+            setMusicSet(prefix + "Boss", Vars.control.sound.bossMusic);
+        }else{
+            mixMusic();
+        }
+    }
+
+    /** Gets prefix based on planet */
+    private static final String getPlanetPrefix(){
+        Planet plant = Vars.state.rules.planet;
+        // If MineDusty is loaded + planet is Theia
+        if(Vars.mods.locateMod("minedusty") != null && plant.name.equals("minedusty-theia")){ return "theia"; }
+        if(!settings.getBool("@setting.music-enable-erekir-music")){ return "vanilla";}
+        return plant == Planets.erekir ? "erekir" : "vanilla";
+    }
+
+    /** Whether to play grimdark music */
     static boolean isGrim(){
         var data = player.team().data();
         if (data.hasCore() && data.core().healthf() < 0.5f){
@@ -138,61 +195,6 @@ public class SPMusic{
         if(w != null){
             weatherMusicSets.put(w, music);
         }
-    }
-
-    /** Places music in musicSets, all of it */
-    public static void initMusicSets(){
-        musicSets.put("vanillaAmbient", new Seq<>(Vars.control.sound.ambientMusic));
-        musicSets.put("vanillaDark", new Seq<>(Vars.control.sound.darkMusic));
-        musicSets.put("vanillaBoss", new Seq<>(Vars.control.sound.bossMusic));
-
-        // WIP: Erekir sets
-        // musicSets.put("erekirAmbient", Seq.with(erekir1, erekir2));
-        // musicSets.put("erekirDark", Seq.with(erekirDark1, erekirDark2));
-        // musicSets.put("erekirBoss", Seq.with(erekirBoss1, erekirBoss2));
-
-        // Theia specific music
-        // musicSets.put("theiaAmbient", Seq.with(theia1, theia2));
-        // musicSets.put("theiaDark", Seq.with(theiaDark1, theiaDark2));
-        // musicSets.put("theiaBoss", Seq.with(theiaBoss1, theiaBoss2));
-
-        // Then comes custom music
-        musicSets.put("grimDark", Seq.with(grim2));
-
-        // Weather specific music
-        addWeatherMusic(Weathers.rain.name, Seq.with(rain1));
-        addWeatherMusic("minedusty-heavy-rain", Seq.with(rain1));
-        // weatherMusicSets.put(Weathers.sandstorm, Seq.with(sand1));
-    }
-
-    /** Update Ambient, Dark, and Boss music sets based on planet */
-    private static void updatePlanetMusic(){
-        boolean minedustyLoaded = Vars.mods.locateMod("minedusty") != null;
-
-        // if(minedustyLoaded && Vars.state.rules.planet.name.equals("minedusty-theia")){
-        //     // Log.info("Loading theia specific music!");
-        //     // setMusicSet("theiaAmbient", Vars.control.sound.ambientMusic);
-        //     // setMusicSet("theiaDark", Vars.control.sound.darkMusic);
-        //     // setMusicSet("theiaBoss", Vars.control.sound.bossMusic);
-        //     return;
-        // }
-
-        if(Vars.state.rules.planet != Planets.sun){
-            String prefix = getPlanetPrefix();
-            setMusicSet(prefix + "Ambient", Vars.control.sound.ambientMusic);
-            setMusicSet(prefix + "Dark", Vars.control.sound.darkMusic);
-            setMusicSet(prefix + "Boss", Vars.control.sound.bossMusic);
-        }else{
-            mixMusic();
-        }
-    }
-
-    /** Gets prefix based on planet */
-    private static final String getPlanetPrefix(){
-        Planet plant = Vars.state.rules.planet;
-        if(Vars.mods.locateMod("minedusty") != null && plant.name.equals("minedusty-theia")){ return "theia"; }
-        if(!settings.getBool("@setting.music-enable-erekir-music")){ return "vanilla";}
-        return Vars.state.rules.planet == Planets.erekir ? "erekir" : "vanilla";
     }
 
     /** Mixes vanilla and erekir music sets. */

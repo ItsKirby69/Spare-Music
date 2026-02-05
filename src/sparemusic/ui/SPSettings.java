@@ -8,13 +8,16 @@ import mindustry.graphics.Pal;
 import mindustry.ui.dialogs.SettingsMenuDialog;
 import mindustry.ui.dialogs.SettingsMenuDialog.SettingsTable.Setting;
 
+import static arc.Core.settings;
 import static mindustry.Vars.ui;
 
 public class SPSettings {
     public static void load() {
         ui.settings.addCategory("@setting.music-settings-title.title", "sparemusic-settings-icon", t -> {
             t.pref(new Title("@setting.music-toggles-title"));
+            t.row();
             
+            t.pref(new SubTitle("@setting.tooltip-erekir"));
             t.checkPref("@setting.music-enable-erekir-music", true);
 
             t.pref(new TableSetting("github-linko", new Table(c -> {
@@ -24,7 +27,7 @@ public class SPSettings {
                         ui.showInfoFade("@linkfail");
                         Core.app.setClipboardText(url);
                     }
-                }).size(50f).tooltip("@setting.dusty-github").right().bottom();    
+                }).size(50f).tooltip("@setting.tooltip-github").right().bottom();    
             })));
         });
     }
@@ -54,6 +57,19 @@ public class SPSettings {
             table.add(title).color(Pal.accent).padTop(25f).padRight(110f).padBottom(-5).left().pad(5);
             table.row();
             table.image().color(Pal.accent).height(3f).padRight(110f).padBottom(25f).left().fillX().padBottom(5f);
+            table.row();
+        }
+    }
+
+    public static class SubTitle extends Setting {
+        public SubTitle(String text){
+            super("");
+            this.title = text;
+        }
+
+        @Override
+        public void add(SettingsMenuDialog.SettingsTable table){
+            table.add(title).color(Pal.gray).padTop(25f).padRight(110f).padBottom(-5).left().pad(5);
             table.row();
         }
     }
