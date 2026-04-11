@@ -33,6 +33,8 @@ public class SPMusic{
     theia1, theia2, // Ambient music
     theiaDark1, theiaDark2, // Dark music
     theiaBoss1, theiaBoss2, // Boss music
+    warning, // rain music
+    dust, // Grim music
 
     /** Erekir Specific Music */
     erekir1, erekir2, // Ambient music
@@ -67,9 +69,15 @@ public class SPMusic{
         String[] theiaDarkTracks = {"theiaDark1", "theiaDark2"};
         String[] theiaBossTracks = {"theiaBoss1", "theiaBoss2"};
 
+        // Temp
+        String[] rainTheia = {"warning"};
+        String[] grimTheia = {"dust"};
+
         loadMusicSet("grim/", grimTracks);
         loadMusicSet("", rainTracks);
 
+        loadMusicSet("minedusty/", rainTheia);
+        loadMusicSet("minedusty/", grimTheia);
         // loadMusicSet("erekir/", erekirTracks);
         // loadMusicSet("erekir/", erekirDarkTracks);
         // loadMusicSet("erekir/", erekirBossTracks);
@@ -92,6 +100,7 @@ public class SPMusic{
     private static void specialMusics(){
         if(!Vars.state.isGame() || Vars.state.boss() != null) return;
         String prefix = getPlanetPrefix();
+        boolean isTheia = prefix.equals("theia");
 
         // Plays weather specific music (priority over Grim music)
         Seq<Music> weather = currentWeatherMusic();
@@ -104,13 +113,13 @@ public class SPMusic{
         // Plays Grimdark music (priority over Dark music)
         if(isGrim()){
             setMusicSet(prefix + "Ambient", Vars.control.sound.ambientMusic);
-            setMusicSet("grimDark", Vars.control.sound.darkMusic);
+            String grimSet = isTheia && musicSets.containsKey("theiaGrimDark") ? "theiaGrimDark" : "grimDark";
+            setMusicSet(grimSet, Vars.control.sound.darkMusic);
             return;
         }
 
         setMusicSet(prefix + "Ambient", Vars.control.sound.ambientMusic);
         setMusicSet(prefix + "Dark", Vars.control.sound.darkMusic);
-
     }
 
     /** Places music in musicSets, all of it */
@@ -128,22 +137,23 @@ public class SPMusic{
         // musicSets.put("theiaAmbient", Seq.with(theia1, theia2));
         // musicSets.put("theiaDark", Seq.with(theiaDark1, theiaDark2));
         // musicSets.put("theiaBoss", Seq.with(theiaBoss1, theiaBoss2));
+        musicSets.put("theiaGrimDark", Seq.with(grim1, grim2, dust));
 
         // Then comes custom music
         musicSets.put("grimDark", Seq.with(grim1, grim2));
 
         // Weather specific music
         addWeatherMusic(Weathers.rain.name, Seq.with(rain1, rain2));
-        addWeatherMusic("minedusty-heavy-rain", Seq.with(rain1, rain2));
+        addWeatherMusic("minedusty-heavy-rain", Seq.with(rain1, rain2, warning));
         // weatherMusicSets.put(Weathers.sandstorm, Seq.with(sand1));
     }
 
     /** Update Ambient, Dark, and Boss music sets based on planet */
     private static void updatePlanetMusic(){
         String prefix = getPlanetPrefix();
-        boolean minedustyTheia= prefix == "theia";
+        boolean isTheia = prefix.equals("theia");
 
-        // if(minedustyTheia){
+        // if(isTheia){
         //     // Log.info("Loading theia specific music!");
         //     // setMusicSet("theiaAmbient", Vars.control.sound.ambientMusic);
         //     // setMusicSet("theiaDark", Vars.control.sound.darkMusic);
