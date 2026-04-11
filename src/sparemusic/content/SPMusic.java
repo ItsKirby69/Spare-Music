@@ -180,10 +180,13 @@ public class SPMusic{
     } 
 
     @Nullable static Seq<Music> currentWeatherMusic(){
-        if(Vars.state.rules.weather.isEmpty()) return null;
+        if(state.rules.weather == null || state.rules == null || !state.isGame()) return null;
         
-        for(WeatherEntry entry : Vars.state.rules.weather){
-            if(entry.weather.isActive() && weatherMusicSets.containsKey(entry.weather)){
+        for(WeatherEntry entry : state.rules.weather){
+            if(entry.weather == null) continue;
+            if(!entry.weather.isActive()) continue;
+
+            if(weatherMusicSets.containsKey(entry.weather)){
                 return weatherMusicSets.get(entry.weather);
             }
         }
