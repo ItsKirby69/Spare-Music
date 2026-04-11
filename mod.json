@@ -2,7 +2,7 @@
     "displayName": "Spare Music",
     "description": "[#fadf87[]]Adds more music to Mindustry![]\n[acid[]]Functions as the music mod for my other mod, MineDusty![]",
     "version": "v1",
-    "minGameVersion": "154",
+    "minGameVersion": "157",
     "author": "[brick[]]ItsKirby[]",
     "java": true,
     "main": "sparemusic.SpareMusicMod"
