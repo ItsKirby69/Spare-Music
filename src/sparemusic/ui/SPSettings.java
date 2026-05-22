@@ -8,17 +8,23 @@ import mindustry.graphics.Pal;
 import mindustry.ui.dialogs.SettingsMenuDialog;
 import mindustry.ui.dialogs.SettingsMenuDialog.SettingsTable.Setting;
 
-import static arc.Core.settings;
 import static mindustry.Vars.ui;
 
 public class SPSettings {
     public static void load() {
-        ui.settings.addCategory("@setting.music-settings-title.title", "sparemusic-settings-icon", t -> {
-            t.pref(new Title("@setting.music-toggles-title"));
+        ui.settings.addCategory("@settings.music-settings-title", "sparemusic-settings-icon", t -> {
+            t.pref(new SubTitle("@settings.music-toggles-desc"));
+
+            t.pref(new Title("@settings.music-toggles-title"));
             t.row();
-            
-            t.pref(new SubTitle("@setting.tooltip-erekir"));
-            t.checkPref("@setting.music-enable-erekir-music", true);
+            t.checkPref("vanilla-music", true);
+            t.checkPref("weather-music", true);
+            t.checkPref("planet-music", true);
+            t.checkPref("global-music", true);
+
+            t.pref(new Title("@settings.music-special-title"));
+            t.row();
+            t.checkPref("interplanetary-music", false);
 
             t.pref(new TableSetting("github-linko", new Table(c -> {
                 c.button(Icon.github, new ImageButton.ImageButtonStyle(), () ->{
@@ -27,7 +33,7 @@ public class SPSettings {
                         ui.showInfoFade("@linkfail");
                         Core.app.setClipboardText(url);
                     }
-                }).size(50f).tooltip("@setting.tooltip-github").right().bottom();    
+                }).size(50f).tooltip("@settings.tooltip-github").right().bottom();    
             })));
         });
     }
