@@ -1,9 +1,9 @@
 {
     "displayName": "Spare Music",
-    "description": "[#fadf87[]]Adds more music to Mindustry![]\n[acid[]]Functions as the music mod for my other mod, MineDusty![]",
+    "description": "[#fff596[]]A mod which adds new music to Mindustry! The mod is also designed to allow other mods to add music using a set of directories. Please see the repository for a guide.[]\n[acid[]]Functions as the music mod for my other mod, MineDusty![]",
     "version": "v4",
     "minGameVersion": "157.4",
-    "author": "[brick[]]ItsKirby[]",
+    "author": "[#fff596[]]ItsKirby[]",
     "java": true,
     "main": "sparemusic.SpareMusicMod"
 }
