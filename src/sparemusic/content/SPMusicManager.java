@@ -15,7 +15,6 @@ import mindustry.type.Weather.WeatherEntry;
 public class SPMusicManager {
     
     private SoundControl sound;
-    public static boolean debug = true;
 
     // Again, heavily inspired by Erekir-Music-v8 by TeamOct
     private Seq<Music> vAmbient, vDark, vBoss;
@@ -34,7 +33,7 @@ public class SPMusicManager {
     /** Switch music sets when the world loads. */
     public void onWorldLoad(){
         applyBaseSets(currentPlanet());
-        if(debug) logSets();
+        if(settings.getBool("debug-console")) logSets();
     }
 
     /** Debug logs for all sets when landing on a sector. */

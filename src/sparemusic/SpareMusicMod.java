@@ -45,7 +45,7 @@ public class SpareMusicMod extends Mod{
 		});
 
 		Events.on(ClientLoadEvent.class, e -> {
-			if(!SPMusicManager.debug) return;
+			if(!settings.getBool("debug-console")) return;
 			Log.info("[@] Loaded weathers: ", Vars.content.weathers().size);
 			Vars.content.weathers().each(w -> Log.info(" - @ (@)", w.name, w.minfo.mod == null ? "vanilla" : w.minfo.mod.name));
 		});
