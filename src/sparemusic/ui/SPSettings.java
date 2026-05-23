@@ -26,6 +26,10 @@ public class SPSettings {
             t.row();
             t.checkPref("interplanetary-music", false);
 
+            t.pref(new Title("@settings.debug-toggles-title"));
+            t.row();
+            t.checkPref("debug-console", false);
+
             t.pref(new TableSetting("github-linko", new Table(c -> {
                 c.button(Icon.github, new ImageButton.ImageButtonStyle(), () ->{
                     String url = "https://github.com/ItsKirby69/Spare-Music";

@@ -44,7 +44,7 @@ public class SPMusicLoader {
             // Ref. Thank you smolkeys
             //new Music(Vars.mods.getMod("sparemusic").root.child("music").child("global").child("grimdark").child("grim2.ogg")).play();
 
-            Log.info("Loading music from mod: @ (@)", mod.name, musicDir.absolutePath());
+            // Log.info("Loading music from mod: @ (@)", mod.name, musicDir.absolutePath());
             ObjectMap<String, Seq<Music>> modSets = new ObjectMap<>();
 
             for(Fi planet : musicDir.list()){
