@@ -2,9 +2,9 @@
   
 # <img src="icon.png" width=25%>
 
-[![Download](https://img.shields.io/github/v/release/ItsKirby69/Spare-Music?color=cf8157&include_prereleases&label=DOWNLOAD%20LATEST%20RELEASE&logo=github&logoColor=cf8157&style=for-the-badge)](https://github.com/ItsKirby69/Spare-Music/releases)
+[![Download](https://img.shields.io/github/v/release/ItsKirby69/Spare-Music?colorA=7f4d32&colorB=a86b4a&include_prereleases&label=DOWNLOAD%20LATEST%20RELEASE&logo=github&logoColor=cf8157&style=for-the-badge)](https://github.com/ItsKirby69/Spare-Music/releases)
 [![Total Downloads](https://img.shields.io/github/downloads/ItsKirby69/Spare-Music/total?color=a86b4a&label&logo=docusign&logoColor=white&style=for-the-badge)](https://github.com/ItsKirby69/Spare-Music/releases)
-[![Stars](https://img.shields.io/github/stars/ItsKirby69/Spare-Music?style=for-the-badge&label=⭐%20Star%20Me!&color=a86b4a)](https://github.com/ItsKirby69/Spare-Music)
+[![Stars](https://img.shields.io/github/stars/ItsKirby69/Spare-Music?style=for-the-badge&logo=macys&logoColor=cf8157&label=Star%20Me!&colorA=7f4d32&colorB=a86b4a)](https://github.com/ItsKirby69/Spare-Music)
 </div>
 
 # Spare Music
@@ -30,11 +30,11 @@ Your options are as follows:
 - (custom) Grimdark Tracks, plays during more extreme conditions of Dark tracks.
 - (custom) Weather-specific Tracks, plays when certain weather events play.
 
-To start adding music, your mod should have a music folder present.
+To start adding music, your mod should have a 'music' folder present.
 **JSON/HJSON** mods should have the folder at your root directory.
 **JAVA** mods should have the folder under your `assets/` directory.
 
-You may now create a set of directories as shown below for certain music to play:
+You may now create a set of directories as shown below (under your project folder) for certain music to play:
 ```
 music/
 ├── <planet>/
@@ -65,34 +65,36 @@ For tracks to be played on **custom** weathers. Create a folder with your weathe
 
 ### Example structure:
 ```
-music/
-├── minedusty-theia/
-│   ├── ambient/
-│   │   ├── ambient1.ogg
-│   │   └── ambient2.ogg
-│   ├── dark/
-│   │   └── darkness.ogg
-│   ├── grimdark/
-│   │   └── grim1.ogg
-│   └── weathers/
-│       └── rain/
-│           └── its_wet_outside.ogg
-├── serpulo/
-│   └── ambient/
-│       └── calm_remix.ogg
-└── global/
-    ├── boss/
-    │   └── doom.ogg
-    └── weathers/
-        └── minedusty-heavy-rain/
-            └── flood.ogg
+<project>/
+├── mod.json
+└── music/
+    ├── minedusty-theia/
+    │   ├── ambient/
+    │   │   ├── ambient1.ogg
+    │   │   └── ambient2.ogg
+    │   ├── dark/
+    │   │   └── darkness.ogg
+    │   ├── grimdark/
+    │   │   └── grim1.ogg
+    │   └── weathers/
+    │       └── rain/
+    │           └── its_wet_outside.ogg
+    ├── serpulo/
+    │   └── ambient/
+    │       └── calm_remix.ogg
+    └── global/
+        ├── boss/
+        │   └── doom.ogg
+        └── weathers/
+            └── minedusty-heavy-rain/
+                └── flood.ogg
 ```
 
-### Limiations
+### Limitations
 Note that you cannot remove the vanilla music and where they play. You can still use the same music folder to override them however.
 
 The functionality to allow music to appear on several weathers or in different sets is still being worked on. In the future, you will be able to put folders under the `weather/` folder with keywords of weathers. Like `storm/` for any weather with the word "storm" in it's name.
 
 You **CAN** play music on other mods' planets/weathers! Just use their internal ids and it should work.
 
-## Mods that tamper with the game's music may mess with this mod's ability to play custom music!!
+### Mods that tamper with the game's music may mess with this mod's ability to play custom music!!
